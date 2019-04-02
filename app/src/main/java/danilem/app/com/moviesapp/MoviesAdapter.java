@@ -39,14 +39,18 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MovieViewH
 
     @Override
     public void onBindViewHolder(@NonNull MovieViewHolder movieViewHolder, int i) {
+        StringBuilder sbGenre = new StringBuilder();
 
         Picasso.get().load(values.getValues().get(i).getImage()).into(movieViewHolder.image);
         movieViewHolder.title.setText(values.getValues().get(i).getTitle());
         movieViewHolder.year.setText(values.getValues().get(i).getYear());
-        movieViewHolder.genre.setText(Arrays.toString(values.getValues().get(i).getGenre().toArray()));
         movieViewHolder.director.setText(values.getValues().get(i).getDirector());
         movieViewHolder.description.setText(values.getValues().get(i).getDesription());
-        
+
+        for(int j = 0; j < values.getValues().get(i).getGenre().size(); j++){
+            sbGenre.append(values.getValues().get(i).getGenre().get(j) + " ");
+        }
+        movieViewHolder.genre.setText(sbGenre);
     }
 
     @Override
@@ -74,5 +78,4 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MovieViewH
             description = itemView.findViewById(R.id.tv_description);
         }
     }
-
 }

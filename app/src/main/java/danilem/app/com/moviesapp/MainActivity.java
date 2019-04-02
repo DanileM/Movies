@@ -19,8 +19,6 @@ import danilem.app.com.moviesapp.Module.Example;
 
 public class MainActivity extends AppCompatActivity {
 
-    private static final String TAG = "MoviesApp";
-
     RecyclerView recyclerView;
 
     @Override
