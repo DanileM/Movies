@@ -6,13 +6,9 @@ import java.util.List;
 
 import danilem.app.com.moviesapp.Module.Example;
 
-public class TitlesData extends Title{
+public class TitlesData{
 
     public static ArrayList<ArrayList<String>> dataCheckboxes;
-
-    public TitlesData(String title, int type) {
-        super(title, type);
-    }
 
     public static List<Title> getGenres(){
         List<Title> listTitles = new ArrayList<>();
