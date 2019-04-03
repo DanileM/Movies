@@ -48,16 +48,10 @@ public class FiltersActivity extends AppCompatActivity {
 
         final MoviesViewModel model = ViewModelProviders.of(this).get(MoviesViewModel.class);
 
-        genreList = new ArrayList<>();
-        genreList.add("Genre");
-        genreList.add("Years");
-        genreList.add("Directors");
-
-
         model.getMovies().observe(this, new Observer<Example>() {
             @Override
             public void onChanged(@Nullable Example example) {
-                FiltersAdapter adapter = new FiltersAdapter(FiltersActivity.this, example, genreList);
+                FiltersAdapter adapter = new FiltersAdapter(FiltersActivity.this, TitlesData.getGenres());
                 recyclerView.setAdapter(adapter);
 
             }

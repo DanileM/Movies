@@ -10,45 +10,41 @@ import android.widget.CheckBox;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import danilem.app.com.moviesapp.Module.Example;
-import danilem.app.com.moviesapp.Module.Value;
 
 public class FiltersAdapter extends RecyclerView.Adapter{
 
     private Context context;
-    private List<String> genres;
-    private ArrayList<ArrayList<String>> genreListValues;
-    private Example values;
+    private List<Title> titles;
     boolean[] checked;
 
-    private final int TYPE_ITEM1 = 0;
-    private final int TYPE_ITEM2 = 1;
-
-    FiltersAdapter(Context context, Example values, List<String> genres){
+    FiltersAdapter(Context context, List<Title> titles){
         this.context = context;
-        this.genres = genres;
-        this.values = values;
-        checked = new boolean[values.getValues().size()];
+        this.titles = titles;
     }
 
     @Override
     public int getItemViewType(int position) {
-        if (position == 0)
-            return TYPE_ITEM1;
+        if(isPositionHeader(position))
+            return Title.TITLE_TYPE;
+        return Title.CHECKBOXES_TYPE;
+    }
 
-        return TYPE_ITEM2;
+    private boolean isPositionHeader(int position){
+        return titles.get(position) instanceof Title;
     }
 
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
 
-        if(i == TYPE_ITEM1){
+        if(i == Title.TITLE_TYPE){
             View v = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.filter_title_list_item, viewGroup, false);
             return  new FilterTitleViewHolder(v);
-        }else if (i == TYPE_ITEM2){
+        }else if (i == Title.CHECKBOXES_TYPE){
             View v = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.filter_list_item, viewGroup, false);
             return new FilterCheckBoxViewHolder(v);
         }
@@ -59,20 +55,20 @@ public class FiltersAdapter extends RecyclerView.Adapter{
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder viewHolder, int i) {
 
+
         switch (viewHolder.getItemViewType()){
-            case TYPE_ITEM1:
-                ((FilterTitleViewHolder) viewHolder).title.setText(genres.get(i));
+            case Title.TITLE_TYPE:
+                ((FilterTitleViewHolder) viewHolder).title.setText(titles.get(i).getTitle());
                 break;
-            case TYPE_ITEM2:
-                for(int j = 0; j<getGenreListValues().size(); j++){
-                    ((FilterCheckBoxViewHolder) viewHolder).cbFilter.setText(getGenreListValues().get(j).get(i));
+            case Title.CHECKBOXES_TYPE:
+                for(int j = 0; j < TitlesData.dataCheckboxes.get(i).size(); j++)
+                    ((FilterCheckBoxViewHolder) viewHolder).cbFilter.setText(TitlesData.dataCheckboxes.get(i).get(j));
                 }
-        }
     }
 
     @Override
     public int getItemCount() {
-        return values.getValues().size();
+        return titles.size();
     }
 
 
@@ -94,33 +90,5 @@ public class FiltersAdapter extends RecyclerView.Adapter{
             super(itemView);
             title = itemView.findViewById(R.id.tv_title_item);
         }
-    }
-
-    private ArrayList<ArrayList<String>> getGenreListValues(){
-        genreListValues = new ArrayList<>();
-
-        ArrayList<String> genreValues = new ArrayList<>();
-        ArrayList<String> yearsValues = new ArrayList<>();
-        ArrayList<String> directorsValues = new ArrayList<>();
-
-        for(int j = 0; j<values.getValues().size(); j++){
-            for(int k = 0; k<values.getValues().get(j).getGenre().size(); k++){
-                genreValues.add(values.getValues().get(j).getGenre().get(k));
-            }
-        }
-
-        for (int j = 0; j<values.getValues().size(); j++){
-            yearsValues.add(values.getValues().get(j).getYear());
-        }
-
-        for (int j = 0; j<values.getValues().size(); j++){
-            directorsValues.add(values.getValues().get(j).getDirector());
-        }
-
-        genreListValues.add(genreValues);
-        genreListValues.add(yearsValues);
-        genreListValues.add(directorsValues);
-
-        return genreListValues;
     }
 }

@@ -37,8 +37,9 @@ public class MoviesViewModel extends ViewModel {
             @Override
             public void onResponse(Call<Example> call, Response<Example> response) {
                 if (response.isSuccessful()) {
-                    moviesList.setValue(response.body());
-
+                    Example example = response.body();
+                    moviesList.setValue(example);
+                    TitlesData.setGenreListValues(example);
                     Log.i(TAG, "Response call");
                 }
             }
