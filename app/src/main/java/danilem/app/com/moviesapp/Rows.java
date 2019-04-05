@@ -1,7 +1,6 @@
 package danilem.app.com.moviesapp;
 
 public class Rows extends ListItem {
-
     String row;
     private boolean isSelected;
 

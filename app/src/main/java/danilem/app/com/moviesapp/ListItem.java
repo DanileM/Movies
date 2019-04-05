@@ -1,7 +1,6 @@
 package danilem.app.com.moviesapp;
 
 public class ListItem {
-
     private String name;
     private int id;
 
