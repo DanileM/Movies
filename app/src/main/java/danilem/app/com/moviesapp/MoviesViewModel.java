@@ -39,7 +39,7 @@ public class MoviesViewModel extends ViewModel {
                 if (response.isSuccessful()) {
                     Example example = response.body();
                     moviesList.setValue(example);
-                    TitlesData.setGenreListValues(example);
+
                     Log.i(TAG, "Response call");
                 }
             }

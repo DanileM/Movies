@@ -17,34 +17,36 @@ import danilem.app.com.moviesapp.Module.Example;
 
 public class FiltersAdapter extends RecyclerView.Adapter{
 
-    private Context context;
-    private List<Title> titles;
-    boolean[] checked;
+    private static final int TYPE_HEADER = 0;
+    private static final int TYPE_ROW = 1;
 
-    FiltersAdapter(Context context, List<Title> titles){
+    private Context context;
+    private List<ListItem> listItems;
+
+    FiltersAdapter(Context context, List<ListItem> listItems){
         this.context = context;
-        this.titles = titles;
+        this.listItems = listItems;
     }
 
     @Override
     public int getItemViewType(int position) {
         if(isPositionHeader(position))
-            return Title.TITLE_TYPE;
-        return Title.CHECKBOXES_TYPE;
+            return TYPE_HEADER;
+        return TYPE_ROW;
     }
 
     private boolean isPositionHeader(int position){
-        return titles.get(position) instanceof Title;
+        return listItems.get(position) instanceof Header;
     }
 
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
 
-        if(i == Title.TITLE_TYPE){
+        if(i == TYPE_HEADER){
             View v = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.filter_title_list_item, viewGroup, false);
             return  new FilterTitleViewHolder(v);
-        }else if (i == Title.CHECKBOXES_TYPE){
+        }else if (i == TYPE_ROW){
             View v = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.filter_list_item, viewGroup, false);
             return new FilterCheckBoxViewHolder(v);
         }
@@ -56,39 +58,40 @@ public class FiltersAdapter extends RecyclerView.Adapter{
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder viewHolder, int i) {
 
 
-        switch (viewHolder.getItemViewType()){
-            case Title.TITLE_TYPE:
-                ((FilterTitleViewHolder) viewHolder).title.setText(titles.get(i).getTitle());
+        switch (viewHolder.getItemViewType()) {
+            case TYPE_HEADER:
+                Header header = (Header) listItems.get(i);
+                FilterTitleViewHolder filterTitleVH = (FilterTitleViewHolder) viewHolder;
+                filterTitleVH.title.setText(header.getHeader());
                 break;
-            case Title.CHECKBOXES_TYPE:
-                for(int j = 0; j < TitlesData.dataCheckboxes.get(i).size(); j++)
-                    ((FilterCheckBoxViewHolder) viewHolder).cbFilter.setText(TitlesData.dataCheckboxes.get(i).get(j));
-                }
+            case TYPE_ROW:
+                Rows row = (Rows) listItems.get(i);
+                ((FilterCheckBoxViewHolder) viewHolder).cbFilter.setText(((Rows) listItems.get(i)).getRow());
+        }
     }
 
     @Override
     public int getItemCount() {
-        return titles.size();
+        return listItems.size();
     }
 
-
-    public static class FilterCheckBoxViewHolder extends RecyclerView.ViewHolder{
-
-        CheckBox cbFilter;
-
-        public FilterCheckBoxViewHolder(@NonNull View itemView) {
-            super(itemView);
-            cbFilter = itemView.findViewById(R.id.cb_filter);
-        }
-    }
-
-    public static class FilterTitleViewHolder extends RecyclerView.ViewHolder{
+    private class FilterTitleViewHolder extends RecyclerView.ViewHolder{
 
         TextView title;
 
         public FilterTitleViewHolder(@NonNull View itemView) {
             super(itemView);
             title = itemView.findViewById(R.id.tv_title_item);
+        }
+    }
+
+    private class FilterCheckBoxViewHolder extends RecyclerView.ViewHolder{
+
+        CheckBox cbFilter;
+
+        public FilterCheckBoxViewHolder(@NonNull View itemView) {
+            super(itemView);
+            cbFilter = itemView.findViewById(R.id.cb_filter);
         }
     }
 }
