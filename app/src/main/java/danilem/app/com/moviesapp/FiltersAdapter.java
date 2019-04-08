@@ -15,7 +15,7 @@ import java.util.List;
 
 import danilem.app.com.moviesapp.Module.Example;
 
-public class FiltersAdapter extends RecyclerView.Adapter{
+public class FiltersAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
 
     private static final int HEADER_TYPE = 0;
     private static final int ROW_TYPE = 1;
@@ -30,14 +30,9 @@ public class FiltersAdapter extends RecyclerView.Adapter{
 
     @Override
     public int getItemViewType(int position) {
-        switch (listItems.get(position).getType()) {
-            case 0:
-                return HEADER_TYPE;
-            case 1:
-                return ROW_TYPE;
-            default:
-                return -1;
-        }
+        if(position == 0)
+            return HEADER_TYPE;
+        return ROW_TYPE;
     }
 
     @Override
