@@ -17,36 +17,42 @@ import danilem.app.com.moviesapp.Module.Example;
 
 public class FiltersAdapter extends RecyclerView.Adapter{
 
-    private static final int TYPE_HEADER = 0;
-    private static final int TYPE_ROW = 1;
+    private static final int HEADER_TYPE = 0;
+    private static final int ROW_TYPE = 1;
 
     private Context context;
-    private List<ListItem> listItems;
+    private List<Model> listItems;
 
-    FiltersAdapter(Context context, List<ListItem> listItems){
+    FiltersAdapter(Context context, List<Model> listItems){
         this.context = context;
         this.listItems = listItems;
     }
 
     @Override
     public int getItemViewType(int position) {
-        if(isPositionHeader(position))
-            return TYPE_HEADER;
-        return TYPE_ROW;
+        switch (listItems.get(position).getType()) {
+            case 0:
+                return HEADER_TYPE;
+            case 1:
+                return ROW_TYPE;
+            default:
+                return -1;
+        }
     }
 
-    private boolean isPositionHeader(int position){
-        return listItems.get(position) instanceof Header;
+    @Override
+    public int getItemCount() {
+        return listItems.size();
     }
 
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
 
-        if(i == TYPE_HEADER){
+        if(i == HEADER_TYPE){
             View v = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.filter_title_list_item, viewGroup, false);
             return  new FilterTitleViewHolder(v);
-        }else if (i == TYPE_ROW){
+        }else if (i == ROW_TYPE){
             View v = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.filter_list_item, viewGroup, false);
             return new FilterCheckBoxViewHolder(v);
         }
@@ -59,20 +65,12 @@ public class FiltersAdapter extends RecyclerView.Adapter{
 
 
         switch (viewHolder.getItemViewType()) {
-            case TYPE_HEADER:
-                Header header = (Header) listItems.get(i);
-                FilterTitleViewHolder filterTitleVH = (FilterTitleViewHolder) viewHolder;
-                filterTitleVH.title.setText(header.getHeader());
+            case HEADER_TYPE:
+                ((FilterTitleViewHolder) viewHolder).title.setText(listItems.get(i).getName());
                 break;
-            case TYPE_ROW:
-                Rows row = (Rows) listItems.get(i);
-                ((FilterCheckBoxViewHolder) viewHolder).cbFilter.setText(((Rows) listItems.get(i)).getRow());
+            case ROW_TYPE:
+                ((FilterCheckBoxViewHolder) viewHolder).cbFilter.setText(listItems.get(i).getName());
         }
-    }
-
-    @Override
-    public int getItemCount() {
-        return listItems.size();
     }
 
     private class FilterTitleViewHolder extends RecyclerView.ViewHolder{

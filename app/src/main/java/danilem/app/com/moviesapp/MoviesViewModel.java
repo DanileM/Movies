@@ -17,6 +17,7 @@ public class MoviesViewModel extends ViewModel {
     private static final String TAG = "MoviesViewModel";
 
     private MutableLiveData<Example> moviesList;
+    public static Example example;
 
     public LiveData<Example> getMovies() {
         if (moviesList == null) {
@@ -37,7 +38,7 @@ public class MoviesViewModel extends ViewModel {
             @Override
             public void onResponse(Call<Example> call, Response<Example> response) {
                 if (response.isSuccessful()) {
-                    Example example = response.body();
+                    example = response.body();
                     moviesList.setValue(example);
 
                     Log.i(TAG, "Response call");
