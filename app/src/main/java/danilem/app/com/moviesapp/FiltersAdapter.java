@@ -58,13 +58,13 @@ public class FiltersAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder viewHolder, int i) {
 
-
         switch (viewHolder.getItemViewType()) {
             case HEADER_TYPE:
                 ((FilterTitleViewHolder) viewHolder).title.setText(listItems.get(i).getName());
                 break;
             case ROW_TYPE:
                 ((FilterCheckBoxViewHolder) viewHolder).cbFilter.setText(listItems.get(i).getName());
+                break;
         }
     }
 
